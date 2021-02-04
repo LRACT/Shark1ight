@@ -44,10 +44,22 @@ class Listeners(commands.Cog, name="이벤트 리스너"):
             await o.close()
 
     @commands.Cog.listener()
+    async def on_member_join(self, member):
+        if member.bot:
+            role = member.guild.get_role(806789561665323038)
+            await member.add_roles(role)
+    
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        mute = member.guild.get_roles(803182061229703168)
+        if mute in member.roles:
+            await member.guild.ban(member, reason="뮤트 역할을 가진 채로 서버에서 퇴장.")
+
+    @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         if payload.member.bot:
             return
-            
+
         if payload.message_id == 806794580166180884:
             guild = self.bot.get_guild(payload.guild_id)
             user = guild.get_member(payload.user_id)
