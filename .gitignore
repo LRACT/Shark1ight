@@ -1,3 +1,4 @@
 config.*
 Shark1ight.sqlite
 __pycache__
+*.zip
