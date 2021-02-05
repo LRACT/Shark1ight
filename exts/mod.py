@@ -8,30 +8,13 @@ import asyncio
 
 def kor_time(date):
     KST = timezone('Asia/Seoul')
-    now = date
-    abc = utc.localize(now).astimezone(KST)
+    abc = utc.localize(date).astimezone(KST)
     time = abc.strftime("%Y년 %m월 %d일 %H시 %M분 %S초")
     return time
 
 class Mod(commands.Cog, name="관리"):
     def __init__(self, bot):
         self.bot = bot
-    
-    @commands.command(name="티켓")
-    async def _reopen(self, ctx, channel: discord.TextChannel):
-        if channel.name.startswith("종료_"):
-            if ctx.author.id == channel.topic or ctx.author.top_role.id == 711753639722745896:
-                member = ctx.guild.get_member(int(channel.topic))
-                name = channel.name.replace("종료", "티켓")
-                await channel.edit(name=name)
-                overwrite = discord.PermissionOverwrite(read_messages=True, send_messages=True, manage_channels=True, manage_roles=True)
-                await channel.set_permissions(member, overwrite=overwrite)
-                message = None
-                async for msg in channel.history(limit=200):
-                    if msg.author == self.bot.user:
-                        message = msg
-                await message.reply("<:cs_yes:659355468715786262> @here - 지원 티켓이 소유자 혹은 관리자에 의해 다시 열렸어요!")
-                await ctx.message.add_reaction("<:cs_yes:659355468715786262>")
 
     @commands.command(name="경고")
     @commands.has_role(711753639722745896)
@@ -52,7 +35,7 @@ class Mod(commands.Cog, name="관리"):
                 timestamp=datetime.datetime.utcnow(),
                 color=0xFFFCC9
             )
-            embed.set_thumbnail(url=member.avatar_url_as(format="png", size=2048))
+            embed.set_thumbnail(url=member.avatar_url_as(static_format="png", size=2048))
             embed.set_footer(text=f"실행자 : {ctx.author}", icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
         elif task == "목록":
@@ -72,7 +55,7 @@ class Mod(commands.Cog, name="관리"):
                     timestamp=datetime.datetime.utcnow(),
                     color=0xFFFCC9
                 )
-                embed.set_thumbnail(url=member.avatar_url_as(format="png", size=2048))
+                embed.set_thumbnail(url=member.avatar_url_as(static_format="png", size=2048))
                 embed.set_footer(text=f"실행자 : {ctx.author}", icon_url=ctx.author.avatar_url)
                 await ctx.send(embed=embed)
     
@@ -90,7 +73,7 @@ class Mod(commands.Cog, name="관리"):
                 timestamp=datetime.datetime.utcnow(),
                 color=0x2A2C2D
             )
-            embed.set_thumbnail(url=member.avatar_url_as(format="png", size=2048))
+            embed.set_thumbnail(url=member.avatar_url_as(static_format="png", size=2048))
             embed.set_footer(text=f"실행자 : {ctx.author}", icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
         else:
@@ -101,7 +84,7 @@ class Mod(commands.Cog, name="관리"):
                 timestamp=datetime.datetime.utcnow(),
                 color=0x7E7E7E
             )
-            embed.set_thumbnail(url=member.avatar_url_as(format="png", size=2048))
+            embed.set_thumbnail(url=member.avatar_url_as(static_format="png", size=2048))
             embed.set_footer(text=f"실행자 : {ctx.author}", icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
     
@@ -114,33 +97,6 @@ class Mod(commands.Cog, name="관리"):
             await ctx.message.delete()
             deleted = await ctx.channel.purge(limit=purge)
             await ctx.send(f"<:cs_trash:659355468631769101> {ctx.author.mention} - **{len(deleted)}**개의 메시지가 삭제되었어요!", delete_after=3)
-
-    @commands.command(name="DB")
-    @commands.is_owner()
-    async def _database(self, ctx, todo, *, command):
-        o = await aiosqlite.connect("Shark1ight.sqlite")
-        c = await o.cursor()
-        if todo == "commit":
-            await c.execute(command)
-            await o.commit()
-            await o.close()
-            await ctx.message.add_reaction("<:cs_yes:659355468715786262>")
-        elif todo == "fetch":
-            await c.execute(command)
-            a = ""
-            rows = await c.fetchall()
-            for row in rows:
-                a += f"{row}\n"
-            if len(a) <= 2000:
-                await ctx.send(a)
-            else:
-                print(a)
-                await ctx.send(a[:2000])
-            await o.close()
-            await ctx.message.add_reaction("<:cs_yes:659355468715786262>")
-        else:
-            await o.close()
-            raise commands.BadArgument
 
     @commands.command(name="슬로우", aliases=["슬로우모드"])
     @commands.has_role(711753639722745896)
@@ -172,7 +128,7 @@ class Mod(commands.Cog, name="관리"):
                 timestamp=datetime.datetime.utcnow(),
                 color=0xFF9999
             )
-            embed.set_thumbnail(url=member.avatar_url_as(format="png", size=2048))
+            embed.set_thumbnail(url=member.avatar_url_as(static_format="png", size=2048))
             embed.set_footer(text=f"실행자 : {ctx.author}", icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
         else:
@@ -195,7 +151,7 @@ class Mod(commands.Cog, name="관리"):
                 timestamp=datetime.datetime.utcnow(),
                 color=0xFF5555
             )
-            embed.set_thumbnail(url=user.avatar_url_as(format="png", size=2048))
+            embed.set_thumbnail(url=user.avatar_url_as(static_format="png", size=2048))
             embed.set_footer(text=f"실행자 : {ctx.author}", icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
         else:

@@ -4,7 +4,7 @@ import config
 
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or("상어 "),
-    help_command=None,
+#    help_command="도움",
     intents=discord.Intents.all(),
     chunk_guilds_at_startup=True,
     description="Developers Forum 관리하는 봇"
@@ -14,7 +14,9 @@ def startup(bot):
         "jishaku",
         "exts.mod",
         "exts.auto",
-        "exts.event"
+        "exts.event",
+        "exts.dev",
+        "exts.ticket"
     ]
     for ext in exts:
         try:
