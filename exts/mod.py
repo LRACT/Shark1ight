@@ -47,7 +47,8 @@ class Mod(commands.Cog, name="관리"):
                 a = ""
                 i = 1
                 for row in rows:
-                    a += f"#{i} : {row[2]} - By {row[1]}\n    {row[3]}"
+                    admin = self.bot.get_user(int(row[1])
+                    a += f"#{i} : {row[2]} - By {admin}\n    {row[3]}\n"
                     i += 1
                 embed = discord.Embed(
                     title=f"{member}님의 현재 경고 목록이에요.",
