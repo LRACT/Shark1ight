@@ -9,6 +9,9 @@ class Ticket(commands.Cog, name="티켓 지원 시스템"):
     
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
+        if payload.member.bot:
+            return
+
         if str(payload.emoji) == "<:cs_leave:659355468803866624>":
             g = self.bot.get_guild(payload.guild_id)
             ch = g.get_channel(payload.channel_id)
