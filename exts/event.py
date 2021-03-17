@@ -38,7 +38,7 @@ class Listeners(commands.Cog, name="이벤트 리스너"):
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         if member.guild.id == 702880464893116518:
-            mute = member.guild.get_roles(803182061229703168)
+            mute = member.guild.get_role(803182061229703168)
             if mute in member.roles:
                 await member.guild.ban(member, reason="뮤트 역할을 가진 채로 서버에서 퇴장.")
             
